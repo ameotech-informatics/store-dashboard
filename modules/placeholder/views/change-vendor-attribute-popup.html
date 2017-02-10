@@ -1,0 +1,57 @@
+﻿<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="Cancel()"><span aria-hidden="true">&times;</span></button>
+    <h3 class="modal-title">Change Vendor Attributes</h3>
+</div>
+<div class="modal-body">
+    <div class="box-body">
+        <div id="change-attribute">
+            <form class="form-horizontal" name="formVendorAttr" novalidate="">
+                <div ng-show="Error!=''" class="alert alert-danger">{{Error}}</div>
+                <div ng-show="Message!=''" class="alert alert-success">{{Message}}</div>
+                <div class="row">
+                    <div class="col-xs-2 col-sm-2 col-md-2 overloadHeight" ng-repeat="vendorAttr in PlaceHolderVendorAttributes">
+                        <div class="form-group">
+                            <label class="col-sm-3 overloadWidthTo160">{{vendorAttr.Name}}
+                            </label>
+                            <div class="col-sm-8">
+
+                                <ui-select tooltip="{{vendorAttr.SelectedVal}}" ng-model="vendorAttr.SelectedVal" theme="select2"
+                                    ng-if="vendorAttr.DataType=='LIST'" on-select="OnTextChanged()">
+                                                    <ui-select-match>{{$select.selected}}</ui-select-match>
+                                                    <ui-select-choices repeat="attValue in vendorAttr.ValidAttributesValues | filter:$select.search">
+                                                        <div>{{attValue}}</div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+                                <ui-select tooltip="{{vendorAttr.SelectedVal}}" ng-model="vendorAttr.SelectedVal" 
+                                    addnewenabled theme="select2" ng-if="vendorAttr.DataType=='LIST_WITH_OVERRIDE'" on-select="OnTextChanged()">
+                                                    <ui-select-match>{{$select.selected}}</ui-select-match>
+                                                    <ui-select-choices repeat="attValue in vendorAttr.ValidAttributesValues | filter:$select.search">
+                                                        <div>{{attValue}}</div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+                                <note-box ng-model="vendorAttr.SelectedVal" ng-if="vendorAttr.DataType=='NOTE'"></note-box>
+
+                                <input tooltip="{{vendorAttr.SelectedVal}}" type="text" ng-keyup="OnTextChanged()" limit="{{vendorAttr.HighLimit}}"
+                                    class="form-control" ng-model="vendorAttr.SelectedVal" ng-if="vendorAttr.DataType=='TEXT'" />
+
+                                <input tooltip="{{vendorAttr.SelectedVal}}" type="text" numbers-only class="form-control"
+                                    ng-model="vendorAttr.SelectedVal" ng-min="vendorAttr.LowLimit"
+                                    ng-max="vendorAttr.HighLimit" ng-if="vendorAttr.DataType=='NUMBER'" />
+
+                                <input tooltip="{{vendorAttr.SelectedVal}}" type="text" float-only class="form-control"
+                                    ng-model="vendorAttr.SelectedVal" ng-min="vendorAttr.LowLimit"
+                                    ng-max="vendorAttr.HighLimit" ng-if="vendorAttr.DataType=='FLOAT'" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" ng-disabled="formVendorAttr.$invalid" ng-click="ChangeVendorAttributes()">OK</button>
+        <button class="btn Cancel" ng-click="Cancel()">Cancel</button>
+    </div>
+</div>

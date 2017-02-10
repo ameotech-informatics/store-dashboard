@@ -1,0 +1,28 @@
+﻿<div class="container">
+    <div class="offset4 span4 col-md-6 col-md-offset-3">
+        <hr />
+        <div class="text-center">
+            <label for="lastname" class="control-label text-muted"><span style="color: #387db8">Please complete the form to register</span></label>
+        </div>
+        <hr />
+        <div class="text-center">
+            <input type="text" class="form-control text-center inputBorder" ng-model="UserModel.FirstName" id="Text1" placeholder="First Name" />
+        </div>
+        <br />
+        <div class="text-center">
+            <input type="text" class="form-control text-center inputBorder" ng-model="UserModel.LastName" id="Text4" placeholder="Last Name" />
+        </div>
+        <br />
+        <div class="text-center">
+            <input type="text" class="form-control text-center inputBorder" ng-model="UserModel.Email" id="Text3" placeholder="Email" />
+        </div>
+        <br />
+        <div class="text-center">
+            <input type="password" class="form-control text-center inputBorder" ng-model="UserModel.PasswordEncr" id="Text2" placeholder="Password" />
+        </div>
+        <hr />
+        <div class="text-center">
+            <input type="button" class="btn :hover btn-primary" ng-click="CreateUser()" value="Register" />
+        </div>
+    </div>
+</div>

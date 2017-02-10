@@ -1,0 +1,54 @@
+﻿<div>
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <div class="col-lg-7 col-sm-2  col-md-2 change hidden-print">
+                <p class="text-uppercase">select hierarchy</p>
+            </div>
+            <div class="col-lg-5 col-xs-10 pull-right select">
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <label>Business Unit</label>
+                   
+                    <ui-select ng-model="ContextModalToSend.Biz" theme="select2" on-select="onChangeBuz()" style="min-width: 100px;">
+                        <ui-select-match>{{$select.selected.BusinessUnitName}}</ui-select-match>
+                        <ui-select-choices repeat="business in Businesses | filter:$select.search">
+                            <div>{{business.BusinessUnitName}}</div>
+                        </ui-select-choices>
+                    </ui-select>
+                  
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <label>Department</label>
+
+                    <ui-select ng-model="ContextModalToSend.Department" theme="select2" ng-disabled="DisableContext" on-select="onChangeDep()" style="min-width: 100px;">
+                        <ui-select-match>{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="department in Contexts | filter:$select.search">
+                            <div>{{department.Name}}</div>
+                        </ui-select-choices>
+                    </ui-select>
+
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <label>Class</label>
+
+                    <ui-select ng-model="ContextModalToSend.Class" ng-disabled="DisableContext" theme="select2" on-select="onChangeClass()">
+                        <ui-select-match>{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="class in ContextModalToSend.Department.Classes | filter:$select.search">
+                            <div>{{class.Name}}</div>
+                        </ui-select-choices>
+                    </ui-select>
+
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <label>Subclass</label>
+
+                    <ui-select ng-model="ContextModalToSend.SubClass" ng-disabled="DisableContext" theme="select2" on-select="OnChangeSubClass()" style="min-width: 100px;">
+                        <ui-select-match>{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="class in ContextModalToSend.Class.SubClasses | filter:$select.search">
+                            <div>{{class.Name}}</div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>      
+    </form>
+</div>

@@ -1,0 +1,148 @@
+﻿<div class="general-wrapper">
+    <section class="content">
+        <div class="box new-user col-lg-11 overloadbox">
+            <div class="container containerOverride user-create-form">
+                <form name="userform" novalidate ng-submit="CreateUser()">
+                    <div class="row">
+                        <!--  <div class="col-md-2">
+                        </div>-->
+
+
+                        <div style="margin: 10px;" ng-show="Error!=''" class="alert alert-danger">{{Error}}</div>
+                        <div class="col-md-5">
+
+                            <div class="form-group placeholder placeholderOverride">
+                                <label>First Name</label>
+                                <input type="text" required ng-model="User.FirstName" class="form-control" />
+                            </div>
+                            <div class="form-group placeholder placeholderOverride">
+                                <label>Last Name</label>
+                                <input type="text" ng-model="User.LastName" required class="form-control" />
+                            </div>
+                            <div class="form-group placeholder placeholderOverride">
+                                <label>Email</label>
+                                <input type="email" required ng-model="User.Email" class="form-control" />
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group placeholder placeholderOverride tablewidth" ng-if="UserId<=0">
+                                <label>Password</label>
+                                <input type="password" required ng-model="User.PasswordEncr" class="form-control" />
+                            </div>
+                            <!--   <div class="form-group placeholder placeholderOverride">
+                                <label>Role</label>
+                                <select class="form-control select" name="Roles" ng-model="User.Role">
+                                    <option value="">Select Roles</option>
+                                    <option ng-selected="User.Role==RoleList.Name" required value="{{RoleList.Name}}" ng-repeat="RoleList in RolesList">{{RoleList.Name}}</option>
+                                </select>
+                            </div>-->
+                            <div class="form-group placeholder placeholderOverride tablewidth" ng-if="UserId<=0" >
+                                <label>Confirm Password</label>
+                                <input equals="{{User.PasswordEncr}}" required ng-model="ConfirmPass" type="password" class="form-control" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+
+                        <!--<div class="selectGroupLabel">
+                            <label>Select Groups</label>
+                        </div>-->
+                        <div class="col-md-5">
+                            <label>UnAssigned Groups</label>
+
+                            <fieldset class="fieldset panel panel-default field-hight">
+
+                               <!-- <div class="table-responsive no-margin afftective " style="overflow:scroll;height:150px;">
+                                <table id="mytable" class="table table-bordered table-striped table-fixed-header" >
+                                    <thead class="header">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Create Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table no-bordered" >
+                                        <tr ng-repeat="Group in  Groups" ng-click="SelectGroup(Group)">
+                                            <td ng-class="{ 'checked-context': Group.Checked , '': !Group.Checked }">{{Group.Name}}</td>
+                                            <td ng-class="{ 'checked-context': Group.Checked , '': !Group.Checked }">{{Group.CreateTime}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>-->
+                                
+                                    <table class="table no-bordered">
+                                       
+                                       <thead class="header">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th class="tableheader">Create Date </th>
+                                        </tr>
+                                    </thead>
+                                    </table>
+
+                               
+                                <div class="table-responsive no-margin afftective clsscrollwindow">
+                                    <table class="table no-bordered">
+                                       
+                                        <tr ng-repeat="Group in  Groups" ng-click="SelectGroup(Group)">
+                                            <td ng-class="{ 'checked-context': Group.Checked , '': !Group.Checked }">{{Group.Name}}</td>
+                                            <td ng-class="{ 'checked-context': Group.Checked , '': !Group.Checked }">{{Group.CreateTime}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-md-1" style="margin-top: 20px; padding-right: 0px;">
+                            <a href="javascript:" class=" glyphicon glyphicon-arrow-right" style="font-size: 40px;" ng-click="AssignGroup()"></a>
+                            <div class="clear"></div>
+                            <a href="javascript:" class=" glyphicon glyphicon-arrow-left" style="margin-top: 5px; font-size: 40px;" ng-click="UnAssignGroup()"></a>
+                        </div>
+
+                        <div class="col-md-5">
+                            <label>Assigned Groups</label>
+                            <fieldset class="fieldset panel panel-default field-hight">
+
+                              
+                                   <table class="table no-bordered">
+                                       
+                                       <thead class="header">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th class="tableheader">Create Date</th>
+                                        </tr>
+                                           </thead>
+                                    </table>
+                             
+
+                                <div class="table-responsive no-margin afftective clsscrollwindow">
+                                    <table class="table no-bordered">
+
+                                        <tr ng-repeat="assignGroup in AssignGroups" ng-click="UnSelectGroup(assignGroup)">
+                                            <td ng-class="{ 'checked-context': assignGroup.Checked , '': !assignGroup.Checked }">{{assignGroup.Name}}</td>
+                                            <td ng-class="{ 'checked-context': assignGroup.Checked , '': !assignGroup.Checked }">{{assignGroup.CreateTime}}</td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </fieldset>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-primary" ng-disabled="userform.$invalid || AssignGroups.length<=0" type="submit" ng-show="UserId<=0">Create User</button>
+                            <button class="btn btn-primary" ng-disabled="userform.$invalid || AssignGroups.length<=0" type="submit" ng-show="UserId>0">Update User</button>
+                            <a class="btn btn-default" href="#/user">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+
+
+
+            </div>
+        </div>
+    </section>
+</div>

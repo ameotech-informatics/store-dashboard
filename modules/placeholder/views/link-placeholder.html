@@ -1,0 +1,223 @@
+﻿<div class="general-wrapper" id="linkplarea">
+    <form class="box-body mejor">
+        <div class="col-md-1 pull-right cross">
+            <button type="button" class="close" ng-click="CloseLinkPopupFromButton()">&times;</button>
+        </div>
+        <div ng-show="Error!=''" class="alert alert-danger">{{Error}}</div>
+        <div ng-show="Message!=''" class="alert alert-success">{{Message}}</div>
+
+        <section class="content ">
+
+            <div class="box search-area">
+                <div class="box-body major">
+
+
+                    <div class="row">
+
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <p class="text-uppercase">Select Link from Context </p>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Business Units</label>
+                                <div class="col-sm-5">
+
+                                    <ui-select ng-model="BusinessInfo.SelectedBusinessUnit" theme="select2" on-select="OnSelectBusinessUnit()">
+                                    <ui-select-match allow-clear>{{$select.selected.BusinessUnitName}}</ui-select-match>
+                                    <ui-select-choices repeat="business in BusinessInfo.BusinessUnits track by $index">
+                                        <div>{{business.BusinessUnitName}}</div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box search-area" ng-show="BusinessInfo.ShowPlaceholderArea">
+                <div class="box-body linkphboxheight">
+
+                    <div class="row">
+                        <div class="col-md-11 col-sm-11 col-lg-11">
+                            <!--<p class="text-uppercase">Search Placeholders</p>-->
+                            <form class="form-horizontal" role="form">
+                                <div class="row mainDiv">
+                                    <div class="col-xs-2">
+
+                                        <label class="control-label">Style Name</label>
+                                        <div class="col-sm-12" style="padding-left: 0px !important;">
+
+                                            <ui-select ng-model="SearchInputs.StyleName" theme="select2">
+                                            <ui-select-match allow-clear>{{$select.selected}}</ui-select-match>
+                                            <ui-select-choices repeat="StyleName in StyleNameList | filter:$select.search">
+                                                <div>{{StyleName}}</div>
+                                            </ui-select-choices>
+                                        </ui-select>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-xs-2">
+
+                                        <label class="control-label">Merch Vendor Name</label>
+                                        <div class="col-sm-12" style="padding-left: 0px !important;">
+
+                                            <ui-select ng-model="SearchInputs.MerchVendorName" theme="select2">
+                                            <ui-select-match allow-clear>{{$select.selected}}</ui-select-match>
+                                            <ui-select-choices repeat="MerchVenderName in MerchVendorNameList | filter:$select.search">
+                                                <div>{{MerchVenderName}}</div>
+                                            </ui-select-choices>
+                                        </ui-select>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-xs-2">
+
+                                        <label class="control-label">Last Modified Date</label>
+                                        <div class="col-sm-12" style="padding-left: 0px !important;">
+
+                                            <input type="text" id="LastUpdateDate" date-range-picker class="form-control" ng-model="DateHelper.SelectedDate" />
+                                            <span class="input-group-btn"></span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-xs-2">
+
+                                        <label class="control-label">Status</label>
+                                        <div class="col-sm-12" style="padding-left: 0px !important; margin-top: -10px;">
+                                            <ui-select ng-model="SearchInputs.Status" multiple theme="select2">
+                                            <ui-select-match allow-clear>{{$item}}</ui-select-match>
+                                            <ui-select-choices repeat="status in PlaceHolderStatusList | filter:$select.search">
+                                                <div>{{status}}</div>
+                                            </ui-select-choices>
+                                        </ui-select>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-xs-2">
+
+                                        <label class="control-label">Seasons </label>
+                                        <div class="col-sm-12" style="padding-left: 0px !important;">
+
+                                            <ui-select ng-model="SearchInputs.Season" on-select="OnChangeSeason()" theme="select2">
+                                            <ui-select-match allow-clear>{{$select.selected.Season}}</ui-select-match>
+                                            <ui-select-choices repeat="season.Season as season in AllSeasons | filter:$select.search">
+                                                <div>{{season.Season}}</div>
+                                            </ui-select-choices>
+                                        </ui-select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2 col-sm-2 col-md-2">
+
+
+                                        <label class="control-label">In Store Week </label>
+                                        <div class="col-sm-12" style="padding-left: 0px !important; margin-top: -9px;">
+                                            <div range-slider model-min="WeekRange.MinStart" model-max="WeekRange.MinEnd"
+                                                min="WeekRange.Min" max="WeekRange.Max"
+                                                show-values="true" disabled="WeekRange.Disabled" filter="weekcode" data="Weeks">
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1 search-button" style="float: right; margin-right: 10px; margin-top: -10px;">
+                                        <div class="searchButton">
+                                            <a class="btn btn" ng-click="SearchPlaceholdersByBusinessCode()" href="Javascript:">Search</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="BusinessInfo.ShowPlaceholderArea">
+                <div class="col-xs-12">
+                    <div class="box record">
+                        <div class="box-body" id="placeHolderAreaLinked" style="overflow-y:auto;">
+                            <div class="table-responsive no-margin afftective">
+                                <div style="clear: both;"></div>
+                                <table id="example2" datatable="ng" class="table no-bordered">
+                                    <thead>
+
+                                        <tr>
+                                            <th>Link</th>
+                                            <th>ID <i class="fa fa-sort"></i></th>
+                                            <th>Name <i class="fa fa-sort"></i></th>
+                                              <th>Status <i class="fa fa-sort"></i></th>
+                                                <th>Workflow Status <i class="fa fa-sort"></i></th>
+                                            <th>Season <i class="fa fa-sort"></i></th>
+                                          
+                                            <th>Start Week <i class="fa fa-sort"></i></th>
+                                            <th>End Week <i class="fa fa-sort"></i></th>
+                                             <th>Buy Qty <i class="fa fa-sort"></i></th>
+                                            <th>Merch Vendor Name <i class="fa fa-sort"></i></th>
+                                           
+                                            
+                                            <th ng-repeat="itemAttribute in PlaceHoderItemAttributes | filter:{ AttributeName : '!Workflow Status'}"">{{itemAttribute.AttributeName}} <i class="fa fa-sort"></i></th>
+                                             <th>LastUpdateTime <i class="fa fa-sort"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       
+                                        <tr ng-repeat="Placehollder in BusinessInfo.Placeholders">
+                                             <td>
+                                            <a href="Javascript:" ng-click="OnPlaceholderLinkClicked(Placehollder.Id)">
+                                                <i class="fa fa-external-link-square" style="font-size: 150%;"></i>
+                                            </a>
+                                        </td>
+                                            <td>{{Placehollder.Id}}</td>
+                                            <td>{{Placehollder.Name}}</td>
+                                               <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null? Placehollder.PlaceholderAssortmentAttrValues.Status:""}}</td>
+                                               <td ng-repeat="itemAttribute in Placehollder.ItemAttributes | filter:{ AttributeName : 'Workflow Status'}">
+                                             {{itemAttribute.Value}}
+                                         </td>
+
+
+                                            <td>{{Placehollder.Season}}</td>
+                                         
+                                            <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null? Placehollder.PlaceholderAssortmentAttrValues.StartWeekNumDefault:""}}</td>
+                                            <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null? Placehollder.PlaceholderAssortmentAttrValues.EndWeekNumDefault:""}}</td>
+                                               <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null? 
+                                            Placehollder.PlaceholderAssortmentAttrValues.RecBuy:""}}</td>
+
+                                            <td><span tooltip="{{Placehollder.MerchVendorName }}">{{Placehollder!=null ? Placehollder.MerchVendorName : "" | markdown}}</span></td>
+                                           
+                                                 
+                                     
+
+                                              <td  ng-repeat="itemAttribute in Placehollder.ItemAttributes | filter:{ AttributeName : '!Workflow Status'}">{{itemAttribute.Value}}</td>
+                                             <td> <span tooltip="{{Placehollder.LastUpdateTime | date:'MM/dd/yyyy hh:mm:ss a'}}">{{Placehollder.LastUpdateTime | date:'MM/dd/yyyy hh:mm:ss a' | markdown}} </span></td>
+
+                                          <!--  <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null? Placehollder.PlaceholderAssortmentAttrValues.AttrValue1:""}}</td>
+                                            <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null? Placehollder.PlaceholderAssortmentAttrValues.AttrValue2:""}}</td>
+                                            <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null? Placehollder.PlaceholderAssortmentAttrValues.AttrValue3:""}}</td>
+                                            <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null? Placehollder.PlaceholderAssortmentAttrValues.AttrValue4:""}}</td>-->
+
+                                        </tr>
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box -->
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <button type="button" ng-click="CloseLinkPopupFromButton()" class="btn Cancel bttn-margin" data-dismiss="modal">Close</button>
+            <!-- /.row -->
+        </section>
+    </form>
+</div>
+
+

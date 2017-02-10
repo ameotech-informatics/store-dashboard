@@ -1,0 +1,54 @@
+﻿<div id="dashboard-detail">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="Cancel()"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title">Change Dashboard Attributes</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div ng-show="Error!=''" class="alert alert-danger">{{Error}}</div>
+            <div ng-show="Message!=''" class="alert alert-success">{{Message}}</div>
+                <div ng-repeat="itmfilter in ItemAttributes | filter:{Filterable : false}">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" ng-if="!itmfilter.Filterable">{{itmfilter.Name}}</label>
+
+                        <div class="col-sm-6" ng-if="!itmfilter.Filterable">
+
+                            <ui-select ng-model="itmfilter.SelectedVal" theme="select2"
+                                ng-if="itmfilter.DataType=='LIST'">
+                                                    <ui-select-match>{{$select.selected}}</ui-select-match>
+                                                    <ui-select-choices repeat="attValue in itmfilter.ValidAttributesValues | filter:$select.search">
+                                                        <div>{{attValue}}</div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+                            <input type="text" class="selectpicker show-tick form-control"
+                                ng-model="itmfilter.SelectedVal" ng-if="itmfilter.DataType=='TEXT'" />
+
+                            <input type="text" class="selectpicker show-tick form-control" float-only
+                                ng-model="itmfilter.SelectedVal" ng-if="itmfilter.DataType=='FLOAT'" />
+
+                            <input type="number" class="selectpicker show-tick form-control" numbers-only
+                                ng-model="itmfilter.SelectedVal" ng-min="itmfilter.LowLimit" ng-max="itmfilter.HighLimit"
+                                ng-if="itmfilter.DataType=='NUMBER'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Placeholder Status</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" ng-model="placeHolder.Status">
+                            <option value=""></option>
+                            <option value="NEW">NEW</option>
+                            <option value="ACTIVE">ACTIVE</option>
+                            <option value="PUBLISHED">PUBLISHED</option>
+                            <option value="OBSOLETE">OBSOLETE</option>
+                        </select>
+                    </div>
+                </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" ng-click="ChangeDashboardAttributes()">OK</button>
+        <button class="btn Cancel" ng-click="Cancel()">Cancel</button>
+    </div>
+</div>

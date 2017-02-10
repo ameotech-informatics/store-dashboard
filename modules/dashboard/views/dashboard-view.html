@@ -1,0 +1,614 @@
+﻿<div ng-show="ShowDashBoardArea" class="moveupinprint">
+    <div class="main-sidebar">
+        <div class="sidebar ">
+            <div class="box-header">
+
+
+                <h4 class="text-center fill-on">
+                    <a href="javascript:" ng-show="!AutoRefresh" ng-click="OnRefreshIconClicked()">
+                        <img src="/app/Images/AutoRefresh_disabled.jpg" />
+                    </a>
+                    <a href="javascript:" ng-show="AutoRefresh" ng-click="OnRefreshIconClicked()">
+                        <img ng-show="AutoRefresh" src="/app/Images/AutoRefresh_enabled.jpg" />
+                    </a>
+                    Filters
+                    <button ng-click="OnRefreshButton()" class="btn btn-primary refreshButton refereshLeft" ng-show="!AutoRefresh">Refresh</button>
+                    <span class="info-box-text pull-left toggleSpan">
+                        <toggle-switch off-title="Review" on-title="Compute"
+                            is-disabled="CurrentPlaceHolder===undefined || CurrentPlaceHolder==null"
+                            ng-model="showsavedValues">
+                                </toggle-switch>
+                    </span>
+                </h4>
+            </div>
+            <div class="content box-border sidebar-layout ">
+                <div class="row ">
+                    <div class="col-md-6">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Item Filters
+                                    <button class="btn btn-box-tool bottomAnchor" collapsewidget="item-attribute-container" data-widget="collapse"><i class="fa fa-caret-down"></i></button>
+                                </h3>
+                            </div>
+                            <div class="box-body" id="item-attribute-container">
+                                <div class="show-image">
+                                    <img style="height: 146px; width: 251px;" src="{{Thumbnail}}" />
+                                    <span class="imageHover" style="cursor: pointer;">
+                                        <i class="fa fa-pencil-square-o" ng-click="TakeImage()"></i>
+                                    </span>
+                                    <input type="file" capture="camera" accept="image/*" style="display: none;" id="cameraInput">
+                                    <canvas id="canvas" style="display: none;"></canvas>
+                                </div>
+                                <div class="box-header searchin hidden-print">
+                                    <div action="#" method="get" class="sidebar-form">
+                                        <div class="input-group">
+                                            <input ng-model="NamedItemFilter" type="text" name="q" class="form-control circle" placeholder="Search Named Item Filter"
+                                                typeahead="itemfilter.FilterName for itemfilter in ItemFilters | filter:$viewValue | limitTo:20"
+                                                typeahead-on-select="FilterSelected($item, $model, $label)" />
+                                            <span class="input-group-btn">
+                                                <button type='submit' name='search' id='search-btn' class="btn btn-flat circle"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-horizontal">
+                                    <div class="form-group" ng-repeat="itmfilter in ItemAttributes | filter:{Filterable : true}">
+                                        <label class="col-sm-4 control-label" ng-if="itmfilter.Filterable">{{itmfilter.Name}}</label>
+                                        <div class="col-sm-8" ng-if="itmfilter.Filterable && item.DisplayFormat!=='NONE'">
+
+                                            <ui-select ng-model="itmfilter.SelectedVal" theme="select2"
+                                                ng-if="itmfilter.DataType=='LIST' && itmfilter.Name=='Prot Tgt Inv (Wks)'"
+                                                on-select="OnItemAttributeChange(false)">
+                                                <ui-select-match>{{$select.selected}}</ui-select-match>
+                                                <ui-select-choices repeat="attValue in itmfilter.ValidAttributesValues | limitTo:TargetWeeksLength | filter:$select.search">
+                                                    <div>{{attValue}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                            <ui-select ng-model="itmfilter.SelectedVal" theme="select2"
+                                                ng-if="itmfilter.DataType=='LIST' && itmfilter.Name!='Prot Tgt Inv (Wks)'"
+                                                on-select="OnItemAttributeChange(false)">
+                                                <ui-select-match>{{$select.selected}}</ui-select-match>
+                                                <ui-select-choices repeat="attValue in itmfilter.ValidAttributesValues | filter:$select.search">
+                                                    <div>{{attValue}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                            <input type="text" class="selectpicker show-tick form-control" ng-blur="OnItemAttributeChange(true,$event)"
+                                                ng-model="itmfilter.SelectedVal" ng-if="itmfilter.DataType=='TEXT'" />
+
+                                            <input type="text" class="selectpicker show-tick form-control" float-only ng-blur="OnItemAttributeChange(true,$event)"
+                                                ng-model="itmfilter.SelectedVal" ng-if="itmfilter.DataType=='FLOAT'" />
+
+                                            <input type="number" class="selectpicker show-tick form-control" numbers-only ng-blur="OnItemAttributeChange(true,$event)"
+                                                ng-model="itmfilter.SelectedVal" ng-min="itmfilter.LowLimit" ng-max="itmfilter.HighLimit"
+                                                ng-if="itmfilter.DataType=='NUMBER'" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="box" ng-show="!EcomView">
+                            <div class="box-header check">
+                                <h3 class="box-title full">Location Filters
+                                    <button class="btn btn-box-tool bottomAnchor" collapsewidget="location-container" data-widget="collapse"><i class="fa fa-caret-down"></i></button>
+                                </h3>
+                            </div>
+                            <div class="box-body checkbox-box" id="location-container">
+                                <div class="box-title all hidden-print">
+                                    <small>
+                                        <input type="checkbox" icheckbox class="minimal showinprint" ng-model="Just"
+                                            click-handler="SelectAllFilters(true,true)"
+                                            ng-checked="AllLocationFilterSelected">
+                                        All
+                                    </small>
+                                </div>
+                                <div class="form-group" ng-repeat="locationFilter in LocationAttributes">
+                                    <div class="control-label">
+                                        <input type="checkbox" icheckbox class="minimal" click-handler="OnLocationFilterChange()"
+                                            ng-model="locationFilter.Checked">
+                                        {{locationFilter.Name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box page-break">
+                            <div class="box-header">
+                                <h3 class="box-title">Time
+                                    <button class="btn btn-box-tool  bottomAnchor" collapsewidget="season-mapping-container" data-widget="collapse"><i class="fa fa-caret-down"></i></button>
+                                </h3>
+                            </div>
+                            <div class="box-body" id="season-mapping-container">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="error" style="color: red"></div>
+                                        <label class="col-sm-4 control-label">Season</label>
+                                        <div class="col-sm-8">
+
+
+                                            <ui-select theme="select2" ng-model="$parent.CurrentSeason"
+                                                on-select="OnSeasonChange($item,$model, false)">
+                                                <ui-select-match>{{$select.selected.Season}}</ui-select-match>
+                                                <ui-select-choices repeat="s in SeasonMapping">
+                                                    <div>{{s.Season}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Start Week</label>
+                                        <div class="col-sm-8">
+                                            <ui-select ng-model="$parent.StartWeekObj" theme="select2"
+                                                on-select="OnWeekChange(false)">
+                                                <ui-select-match>{{$select.selected.WeekCode}}</ui-select-match>
+                                                <ui-select-choices repeat="time in SeasonTime | filter:$select.search">
+                                                    <div>{{time.WeekCode}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">End Week</label>
+                                        <div class="col-sm-8">
+
+                                            <ui-select ng-model="$parent.EndWeekObj" theme="select2"
+                                                on-select="OnWeekChange(false)">
+                                                <ui-select-match>{{$select.selected.WeekCode}}</ui-select-match>
+                                                <ui-select-choices repeat="weeks in SeasonTime | filter:$select.search">
+                                                    <div>{{weeks.WeekCode}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box" ng-show="!EcomView">
+                            <div class="box-header">
+                                <h3 class="box-title">Zone Time Override
+                                    <button class="btn btn-box-tool bottomAnchor" collapsewidget="zonetimeoveride" data-widget="collapse"><i class="fa fa-caret-down"></i></button>
+                                </h3>
+                            </div>
+                            <div class="box-body" id="zonetimeoveride">
+                                <div class="box-title timezone">
+                                    <small>Enable Zone Override
+                                        <input type="checkbox" icheckbox
+                                            click-handler="OnZoneEnabled()" ng-model="EnableZones" class="minimal" />
+                                    </small>
+                                </div>
+                                <div class="form-horizontal" ng-show="EnableZones">
+                                    <div class="form-group" ng-repeat="zone in Zones | orderBy:'Name'">
+                                        <label class="col-sm-4 control-label">{{zone.Name}}</label>
+                                        <div class="col-sm-8">
+
+                                            <ui-select ng-model="zone.SelectedWeekCode" theme="select2"
+                                                on-select="OnZoneChange(zone)">
+                                                <ui-select-match placeholder="N/A">{{$select.selected.WeekCode}}</ui-select-match>
+                                                <ui-select-choices repeat="week.WeekCode as week in SeasonTime | filter:$select.search">
+                                                    <div>{{week.WeekCode}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box ">
+                            <div class="box-header ">
+                                <h3 class="box-title">Additional Attributes
+                                    <button class="btn btn-box-tool bottomAnchor" collapsewidget="AdditionalAttributes" data-widget="collapse"><i class="fa fa-caret-down"></i></button>
+                                </h3>
+                            </div>
+                            <div class="box-body" id="AdditionalAttributes">
+                                <div class="box-header searchin ">
+                                    <div class="form-horizontal">
+                                        <div class="form-group" ng-repeat="itmfilter in ItemAttributes | filter:{Filterable : false}">
+                                            <label class="col-sm-4 control-label" ng-if="!itmfilter.Filterable">{{itmfilter.Name}}</label>
+
+                                            <div class="col-sm-8" ng-if="!itmfilter.Filterable && itmfilter.DisplayFormat!=='NONE'">
+
+                                                <ui-select ng-model="itmfilter.SelectedVal" theme="select2"
+                                                    ng-if="itmfilter.DataType=='LIST'">
+                                                    <ui-select-match>{{$select.selected}}</ui-select-match>
+                                                    <ui-select-choices repeat="attValue in itmfilter.ValidAttributesValues | filter:$select.search">
+                                                        <div>{{attValue}}</div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+                                                <input type="text" class="selectpicker show-tick form-control"
+                                                    ng-model="itmfilter.SelectedVal" ng-if="itmfilter.DataType=='TEXT'" />
+
+                                                <input type="text" class="selectpicker show-tick form-control" float-only
+                                                    ng-model="itmfilter.SelectedVal" ng-if="itmfilter.DataType=='FLOAT'" />
+
+                                                <input type="number" class="selectpicker show-tick form-control" numbers-only
+                                                    ng-model="itmfilter.SelectedVal" ng-min="itmfilter.LowLimit" ng-max="itmfilter.HighLimit"
+                                                    ng-if="itmfilter.DataType=='NUMBER'" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="box hidden-print">
+                            <div class="box-header ">
+                                <h3 class="box-title">Auto Refresh
+                                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-caret-down"></i></button>
+                                </h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="box-title timezone">
+                                    <small>Enable AutoRefresh
+                                        <input ng-model="AutoRefresh"
+                                            icheckbox
+                                            type="checkbox" class="minimal">
+                                    </small>
+                                </div>
+                                <div class="form-horizontal" ng-hide="AutoRefresh==true">
+                                    <div class="form-group">
+                                        <div class="col-sm-8">
+                                            <button type="button" class="btn btn-primary" ng-click="OnRefreshButton()">Refresh</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hiddenarrow mobilearr">
+        <a role="button" data-toggle="offcanvas" class="sidebar-toggle slide" href="javascript:">
+            <div class="hexagon"><i class="fa fa-angle-right fa-2x"></i></div>
+        </a>
+    </div>
+    <div class="content-wrapper">
+
+   <div class="box-header place-on ">
+            <!--     <div style="float: left;">-->
+            <!-- <span class="aPictureNotExists" style="cursor: pointer;">
+                    <i class="fa fa-pencil-square-o" ng-click="TakeImage()"></i>
+                </span>-->
+            <!-- <img style="height: 80px; width: 100px; border-radius: 4px;" src="{{Thumbnail}}" />
+                <br />-->
+            <!-- <a class="aPictureNotExists" href="javascript:" id="takeImage" ng-click="TakeImage()">Take a picture</a>-->
+
+            <!--  </div>-->
+
+
+            <div>
+                <label class="control-label " style="padding: 7px; float: left;" ng-show="CurrentPlaceHolder.MGId!=null"><b style="font-weight: 700; font-size: 17px;">MERCHGUIDE ID :{{CurrentPlaceHolder.MGId}}</b></label>
+                <div class="form-group center-block placeholder" style="float: right; margin-right: 40px;" id="divPlceholderName">
+                    <label class="control-label" style="padding: 7px; margin-left: -190px;"><b>PLACEHOLDER :</b></label>
+                    <input type="text" class="txtEditPlaceholder" readonly="true" ng-model="CurrentPlaceHolder.Name" ng-show="CurrentPlaceHolder.Name!=null" />
+                    <i class="glyphicon glyphicon-remove-circle clearButtonOnText hidden-print" ng-click="ClearPlaceHolder()" ng-show="CurrentPlaceHolder.Name!=null"></i>
+                    <!-- <small>{{CurrentPlaceHolder.Name}}</small>-->
+                    <button type="button" ng-click="PlaceHolderModel()" ng-disabled="PlaceholderButton" class="btn btn-primary save hidden-print">{{SavePlaceHolderButtonText}}</button>
+                </div>
+            </div>
+        </div>
+        <div class="hiddenarrow desktoparr">
+            <a role="button" data-toggle="offcanvas" class="sidebar-toggle slide" href="javascript:">
+                <div class="hexagon"><i class="fa fa-angle-left fa-2x"></i></div>
+            </a>
+        </div>
+        <section class="content main-layout">
+
+            <div class="row">
+                <section class="col-lg-5 connectedSortable" ng-show="EcomView">
+                    <div class="box on">
+                        <div class="box-header title">
+                            <h3 class="box-title">Historical ROS for Product Type</h3>
+                        </div>
+                        <div class="tab-content no-padding">
+                            <div class="chart tab-pane active" id="ecom-graph-containerS" style="position: relative; height: 235px;">
+                                <ecom-bar-chart avg-product-type-ros="{{Ecom.ClusterROS}}" avg-historical-ros="{{Ecom.SubClassROS}}"
+                                    watchfor="{{EcomGraphLoaded}}" ng-show="EcomView"></ecom-bar-chart>
+                            </div>
+                            <!--<div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>-->
+                        </div>
+                    </div>
+                </section>
+
+                <section class="col-lg-3 connectedSortable" ng-show="EcomView">
+                    <div class="box on">
+                        <div class="box-header title">
+                            <h3 class="box-title">Percentile Likelihood</h3>
+                        </div>
+                        <div class="tab-content no-padding">
+                            <div class="chart tab-pane active" id="perce-graph-container" style="position: relative; height: 235px;">
+                                <!--<ecom-bar-chart watchfor="{{EcomView}}" ng-show="EcomView"></ecom-bar-chart>-->
+                                <ecom-perce-likely avg-perce-likeli-hood="{{Ecom.AvgPerceLikelyHood}}" watchfor="{{EcomGraphLoaded}}" ng-show="EcomView"></ecom-perce-likely>
+                            </div>
+                            <!--<div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>-->
+                        </div>
+                    </div>
+                </section>
+
+                <section class="col-lg-8 connectedSortable" ng-show="!EcomView">
+                    <div class="box on">
+                        <div class="box-header title">
+                            <h3 class="box-title">Customer Centric clusters</h3>
+                        </div>
+                        <div class="tab-content no-padding">
+                            <div class="chart tab-pane active" id="clustor-graph-container" style="position: relative; height: 235px;">
+                                <clustor-graph datasource="ClustorGraphData" subclassros="DashboardData.SubClassROS" watchfor="{{ClustorGraphLoaded}}"></clustor-graph>
+                            </div>
+                            <!--<div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>-->
+                        </div>
+                    </div>
+                </section>
+                <section class="col-lg-4 connectedSortable" id="volumeGradeContainer">
+                    <div class="box on">
+                        <div class="box-header title">
+                            <h3 class="box-title" ng-show="!EcomView">CC Count </h3>
+                            <h3 class="box-title" ng-show="EcomView">Product Type Count </h3>
+                        </div>
+                        <div class="box-body">
+                            <div id="world-map" style="height: 225px; width: 100%;">
+                                <volume-grade datasource="VolumeGrade" is-ecom="EcomView" watchfor="{{ClustorGraphLoaded}}"></volume-grade>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="row around printInLine">
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box rating">
+                        <div class="box-header title">
+                            <h3 class="box-title">Proj St%</h3>
+                        </div>
+                        <div class="inner" ng-show="!showsavedValues">
+                            <h3 class="text-center" style="color: #F1BC21">{{DashboardData.ProjRegSt}}</h3>
+                        </div>
+                        <div class="inner" ng-show="showsavedValues">
+                            <h3 class="text-center" style="color: #F1BC21">{{DashboardData.ProjRegStSaved }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6 printRight">
+                    <div class="small-box rating">
+                        <div class="box-header title">
+                            <h3 class="box-title">REC BUY</h3>
+                        </div>
+                        <div class="inner" ng-show="!showsavedValues">
+                            <h3 class="text-center" style="color: #2DC7AC">{{DashboardData.RecBuy|number}}</h3>
+                        </div>
+                        <div class="inner" ng-show="showsavedValues">
+                            <h3 class="text-center" style="color: #2DC7AC">{{DashboardData.RecBuySaved |number}}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box rating">
+                        <div class="box-header title">
+                            <h3 class="box-title">BAND MULTIPLIER</h3>
+                        </div>
+                        <div class="inner" ng-show="!showsavedValues">
+                            <h3 data-toggle="tooltip" title="H Ratio:{{DashboardData.ActualRatio}}" class="text-center dis redCircle h3Band" ng-show="DashboardData.BandColor<=2">{{DashboardData.BandMultiplier|number:2}}</h3>
+                            <h4 class="text-center band redCircle h4Band" ng-show="DashboardData.BandColor<=2" style="color: #F1BC21">{{DashboardData.BandName}}</h4>
+
+                            <h3 data-toggle="tooltip" title="H Ratio:{{DashboardData.ActualRatio}}" class="text-center dis yellowCircle h3Band" ng-show="(DashboardData.BandColor>2 && DashboardData.BandColor<=4)">{{DashboardData.BandMultiplier|number:2}}</h3>
+                            <h4 class="text-center band yellowCircle h4Band" ng-show="(DashboardData.BandColor>2 && DashboardData.BandColor<=4)">{{DashboardData.BandName}}</h4>
+
+                            <h3 data-toggle="tooltip" title="H Ratio:{{DashboardData.ActualRatio}}" class="text-center dis h3Band" style="color: #F1BC21" ng-show="(DashboardData.BandColor>4)">{{DashboardData.BandMultiplier|number:2}}</h3>
+                            <h4 class="text-center band h4Band" ng-show="(DashboardData.BandColor>4)" style="color: #F1BC21">{{DashboardData.BandName}}</h4>
+                        </div>
+
+                        <d
+                            iv class="inner" ng-show="showsavedValues">
+                            <h3 class="text-center dis redCircle h3Band" ng-show="DashboardData.BandColor<=2">{{DashboardData.BandMultiplierSaved |number:2}}</h3>
+                            <h4 class="text-center band redCircle h4Band" ng-show="DashboardData.BandColor<=2" style="color: #F1BC21">{{DashboardData.BandNameSaved }}</h4>
+
+                            <h3 class="text-center dis yellowCircle h3Band" ng-show="(DashboardData.BandColor>2 && DashboardData.BandColor<=4)">{{DashboardData.BandMultiplierSaved |number:2}}</h3>
+                            <h4 class="text-center band yellowCircle h4Band" ng-show="(DashboardData.BandColor>2 && DashboardData.BandColor<=4)">{{DashboardData.BandNameSaved }}</h4>
+
+                            <h3 class="text-center dis h3Band" style="color: #F1BC21" ng-show="(DashboardData.BandColor>4)">{{DashboardData.BandMultiplierSaved |number:2}}</h3>
+                            <h4 class="text-center band h4Band" ng-show="(DashboardData.BandColor>4)" style="color: #F1BC21">{{DashboardData.BandNameSaved }}</h4>
+                        </d>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6 printRight">
+                    <div class="small-box rating">
+                        <div class="box-header title">
+                            <h3 class="box-title">ROS</h3>
+                        </div>
+                        <div class="inner" ng-show="!showsavedValues">
+                            <h3 data-toggle="tooltip" title="H ROS: {{DashboardData.HROS}}" class="text-center redCircle" ng-show="DashboardData.StoreCount<=136">{{DashboardData.ROS|number:2}}</h3>
+                            <h3 data-toggle="tooltip" title="H ROS: {{DashboardData.HROS}}" class="text-center yellowCircle" ng-show="(DashboardData.StoreCount>=137 && DashboardData.StoreCount<=272)">{{DashboardData.ROS|number:2}}</h3>
+                            <h3 data-toggle="tooltip" title="H ROS: {{DashboardData.HROS}}" class="text-center greenCircle" ng-show="(DashboardData.StoreCount>=272)">{{DashboardData.ROS|number:2}}</h3>
+                        </div>
+                        <div class="inner" ng-show="showsavedValues">
+                            <h3 class="text-center redCircle" ng-show="DashboardData.StoreCountSaved <=136">{{DashboardData.ROSSaved |number:2}}</h3>
+                            <h3 class="text-center yellowCircle" ng-show="(DashboardData.StoreCountSaved >=137 && DashboardData.StoreCountSaved<=272)">{{DashboardData.ROSSaved |number:2}}</h3>
+                            <h3 class="text-center greenCircle" ng-show="(DashboardData.StoreCountSaved >=272)">{{DashboardData.ROSSaved |number:2}}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6 printCount" ng-show="!EcomView">
+                    <div class="small-box rating">
+                        <div class="box-header title">
+                            <h3 class="box-title">STORE COUNT</h3>
+                        </div>
+                        <div class="inner" ng-show="!showsavedValues">
+                            <h3 class="text-center" style="color: #2DC7AC">{{DashboardData.StoreCount|number}}</h3>
+                        </div>
+                        <div class="inner" ng-show="showsavedValues">
+                            <h3 class="text-center" style="color: #2DC7AC">{{DashboardData.StoreCountSaved |number}}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-lg-5 col-md-12 cut">
+                    <div class="info-box">
+                        <div class="info-box-content lin">
+                            <span class="info-box-text pull-left">
+                                <h2>CONFIDENCE</h2>
+                            </span>
+                            <div ng-show="!showsavedValues">
+                                <span data-toggle="tooltip" title="BrandingRecCount:{{DashboardData.BrandingRecCount}}, BandRelStdErr:{{DashboardData.BandRelStdErr}}" class="info-box-icon pull-right redCircleBack" ng-show="DashboardData.Confidence=='L'">{{DashboardData.Confidence}}</span>
+                                <span data-toggle="tooltip" title="BrandingRecCount:{{DashboardData.BrandingRecCount}}, BandRelStdErr:{{DashboardData.BandRelStdErr}}" class="info-box-icon pull-right  yellowCircleBack" ng-show="DashboardData.Confidence=='M'">{{DashboardData.Confidence}}</span>
+                                <span data-toggle="tooltip" title="BrandingRecCount:{{DashboardData.BrandingRecCount}}, BandRelStdErr:{{DashboardData.BandRelStdErr}}" class="info-box-icon pull-right greenCircleBack" ng-show="DashboardData.Confidence=='H'">{{DashboardData.Confidence}}</span>
+                            </div>
+
+                            <div ng-show="showsavedValues">
+                                <span class="info-box-icon pull-right redCircleBack" ng-show="DashboardData.ConfidenceSaved =='L'">{{DashboardData.ConfidenceSaved }}</span>
+                                <span class="info-box-icon pull-right  yellowCircleBack" ng-show="DashboardData.ConfidenceSaved =='M'">{{DashboardData.ConfidenceSaved }}</span>
+                                <span class="info-box-icon pull-right greenCircleBack" ng-show="DashboardData.ConfidenceSaved =='H'">{{DashboardData.ConfidenceSaved}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7 col-md-12 cut">
+                    <div class="small-box divine">
+                        <span class="info-box-icon no">
+                            <h2>WOF</h2>
+                        </span>
+                        <div class="progress" data-toggle="tooltip"
+                            title="Duration: {{DashboardData.Duration}}, AP Prot Tgt Inv: {{DashboardData.ProtTgtInv}}" ng-show="!showsavedValues">
+                            <div class="progress-bar progress-bar" role="progressbar"
+                                progress-bar-watch="DashboardData.WOF"
+                                progress-bar aria-valuenow="DashboardData.WOF"
+                                aria-valuemin="0" aria-valuemax="100">
+                                {{DashboardData.WOF}}
+                            </div>
+                        </div>
+
+                        <div class="progress" data-toggle="tooltip"
+                            title="AP Prot Tgt Inv: {{DashboardData.ProtTgtInvSaved }}" ng-show="showsavedValues">
+                            <div class="progress-bar progress-bar" role="progressbar"
+                                progress-bar-watch="DashboardData.WOFSaved "
+                                progress-bar aria-valuenow="DashboardData.WOFSaved "
+                                aria-valuemin="0" aria-valuemax="100">
+                                {{DashboardData.WOFSaved }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row rowprint">
+                <div ng-class="{'col-md-6 com-md-print': !EcomView, 'col-md-12': EcomView }">
+                    <div class="box on">
+                        <div class="box-header title">
+                            <h3 class="box-title">Seasonal Profile</h3>
+                        </div>
+                        <div class="box-body">
+                            <div id="world-map" style="height: 205px; width: 100%;" class="container-seasonal-profile">
+                                <season-profile datasource="SeasonProfiles" zones="Zones"
+                                    weekfrom="{{StartWeekNum}}" weekto="{{EndWeekNum}}" endweek="EndWeekObj" startweek="StartWeekObj"
+                                    watchfor="{{SeasonProfileGraphWatcher}}" zonechange="{{ZoneWatcher}}"
+                                    season="SelectedSeason"></season-profile>
+                            </div>
+                        </div>
+                        <!--<div class="box-footer no-border seasonal">
+                            <div class="row">
+                                <div class="col-xs-3 text-center" style="border-right: 1px solid #f4f4f4">
+                                    <div class="knob-label">
+                                        <button class="btn btn-block btn-info">ZONE 1</button>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 text-center" style="border-right: 1px solid #f4f4f4">
+                                    <div class="knob-label">
+                                        <button class="btn btn-block btn-danger">ZONE 2</button>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 text-center">
+                                    <div class="knob-label">
+                                        <button class="btn btn-block btn-success">ZONE 3</button>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 text-center">
+                                    <div class="knob-label">
+                                        <button class="btn btn-block btn-warning">ZONE 4</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+                <div class="col-md-6 com-md-print1" ng-show="!EcomView">
+                    <div class="box on box-info">
+                        <div class="box-header title">
+                            <h3 class="box-title">Store count by segment</h3>
+                        </div>
+                        <div class="box-body" style="display: block;">
+                            <div class="table-responsive no-margin">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Cluster Name</th>
+                                            <th>High Volume</th>
+                                            <th>Low Volume</th>
+                                            <th>Grand Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="segment in DashboardData.StoreCountsBySegments">
+                                            <td>{{segment.Name}}</td>
+                                            <td>{{segment.HighVolume}}</td>
+                                            <td>{{segment.LowVolume}}</td>
+                                            <td>{{segment.Total}}</td>
+                                        </tr>
+                                        <tr ng-show="DashboardData.StoreCountsBySegments.length>0">
+                                            <td>Grand Total</td>
+                                            <td>{{DashboardData.GrandTotalHigh}}</td>
+                                            <td>{{DashboardData.GrandTotalLow}}</td>
+                                            <td>{{DashboardData.StoreCount}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip({ tooltipClass: 'thetooltip', position: { my: 'center', at: "top-20" } });
+        $(function () {
+            $('.slide').click(function () {
+                $(this).find('i').toggleClass('fa-angle-left').toggleClass('fa-angle-right');
+                if ($(".main-sidebar").is(":visible")) {
+                    $(".main-sidebar").hide("slow");
+                    $("#divPlceholderName").css('margin-right', "60px");
+                }
+                else {
+                    $(".main-sidebar").show("slow");
+                    $("#divPlceholderName").css('margin-right', "40px");
+                }
+                $(".content-wrapper").toggleClass('nomargin').toggleClass('');
+            });
+        });
+
+        $(document).on("click", ".bottomAnchor", function () {
+            var button = $(this);
+            var containerElem = $("#" + button.attr("collapseWidget"));
+            if (containerElem.is(":visible")) {
+                containerElem.hide();
+            }
+            else {
+                containerElem.show();
+            }
+        });
+
+    });
+
+</script>
+

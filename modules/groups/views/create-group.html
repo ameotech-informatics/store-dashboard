@@ -1,0 +1,100 @@
+﻿<div class="general-wrapper">
+    <section class="content">
+        <div class="box new-user col-lg-11 overloadbox">
+            <div class="container containerOverride">
+                <div class="row">
+                    <div ng-show="Error!=''" class="alert alert-danger">{{Error}}</div>
+                    <div class="col-md-5">
+
+                        <div class="form-group button-margin groupNameContainer">
+                            <label class="label-margin">Name: </label>
+                            <input type="text" ng-model="Group.Name" style="width: 74%;" class="form-control" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Unassigned Context</label>
+                        <fieldset class=" fieldset panel panel-default field-hight">
+                            <table class="table no-bordered">
+                                <thead class="header">
+                                    <tr>
+                                        <!--   <th>Business</th>-->
+                                        <th>Department</th>
+                                        <th>Class</th>
+                                        <th>SubClass</th>
+                                    </tr>
+
+                                </thead>
+                            </table>
+                            <div class="table-responsive no-margin afftective clsscrollwindow">
+                                <table class="table no-bordered">
+
+                                    <tr ng-repeat="Context in Contexts" ng-click="SelectContext(Context)">
+                                        <!-- <td ng-class="{ 'checked-context': Context.Checked , '': !Context.Checked }">{{Context.BusinessUnitName}}</td>-->
+                                        <td ng-class="{ 'checked-context': Context.Checked , '': !Context.Checked }">{{Context.DepartmentName}}</td>
+                                        <td ng-class="{ 'checked-context': Context.Checked , '': !Context.Checked }">{{Context.ClassName}}</td>
+                                        <td ng-class="{ 'checked-context': Context.Checked , '': !Context.Checked }">{{Context.SubclassName}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </fieldset>
+
+                    </div>
+
+                    <div class="col-md-1" style="margin-top: 20px; padding-right: 0px;">
+                        <a href="javascript:" class=" glyphicon glyphicon-arrow-right" style="font-size: 40px;" ng-click="AssignContext()"></a>
+                        <div class="clear"></div>
+                        <a href="javascript:" class=" glyphicon glyphicon-arrow-left" style="margin-top: 5px; font-size: 40px;" ng-click="UnAssignContext()"></a>
+                    </div>
+
+                    <div class="col-md-5">
+                        <form>
+                            <label>Assigned Context</label>
+                            <fieldset class=" fieldset panel panel-default field-hight">
+
+                                <table class="table no-bordered">
+                                    <thead class="header">
+                                        <tr>
+                                            <!--   <th>Business</th>-->
+                                            <th>Department</th>
+                                            <th>Class</th>
+                                            <th>SubClass</th>
+                                        </tr>
+
+                                    </thead>
+                                </table>
+                                <div class="table-responsive no-margin afftective clsscrollwindow ">
+                                    <table class="table no-bordered">
+
+                                        <tr ng-repeat="assigncontext in AssignContexts" ng-click="UnSelectContext(assigncontext)">
+                                            <!--  <td ng-class="{ 'checked-context': assigncontext.Checked , '': !assigncontext.Checked }">{{assigncontext.BusinessUnitName}}</td>-->
+                                            <td ng-class="{ 'checked-context': assigncontext.Checked , '': !assigncontext.Checked }">{{assigncontext.DepartmentName}} </td>
+                                            <td ng-class="{ 'checked-context': assigncontext.Checked , '': !assigncontext.Checked }">{{assigncontext.ClassName}}</td>
+                                            <td ng-class="{ 'checked-context': assigncontext.Checked , '': !assigncontext.Checked }">{{assigncontext.SubclassName}}</td>
+
+                                        </tr>
+                                    </table>
+                                </div>
+                            </fieldset>
+
+                        </form>
+
+                        <div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <button ng-click="CreateGroup()" ng-disabled="Group.Name=='' || AssignContexts.length<=0" ng-show="GroupId<=0" class="btn btn-primary">Save</button>
+                        <button ng-click="CreateGroup()" ng-disabled="Group.Name=='' || AssignContexts.length<=0" ng-show="GroupId>0" class="btn btn-primary">Update</button>
+                        <a class="btn btn-default" href="#/groups">Cancel</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

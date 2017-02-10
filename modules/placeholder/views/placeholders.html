@@ -1,0 +1,228 @@
+﻿<div class="general-wrapper">
+    <section class="content">
+        <div class="box search-area">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-11 col-sm-11 col-lg-11">
+                        <p class="text-uppercase">filters</p>
+                        <form class="form-horizontal" role="form">
+                            <div class="row mainDiv">
+
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Style Name</label>
+                                        <div class="col-sm-8 stylewidth">
+
+                                            <ui-select ng-model="SearchInputs.StyleName" theme="select2">
+                                                <ui-select-match allow-clear>{{$select.selected}}</ui-select-match>
+                                                <ui-select-choices repeat="StyleName in StyleNameList | filter:$select.search">
+                                                    <div>{{StyleName}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <div class="form-group merchmarginleft">
+                                        <label class="col-sm-3 control-label merchVendorNameLabel">Merch Vendor Name</label>
+                                        <div class="col-sm-8 MerchVendorName merchbendorwidth">
+
+                                            <ui-select ng-model="SearchInputs.MerchVendorName" theme="select2">
+                                                <ui-select-match allow-clear>{{$select.selected}}</ui-select-match>
+                                                <ui-select-choices repeat="MerchVendorName in MerchVendorNameList | filter:$select.search">
+                                                    <div>{{MerchVendorName}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <div class="form-group merchmarginleft">
+                                        <label class="col-sm-6 control-label">Last Modified Date</label>
+                                        <div class="col-sm-6 input-group lastmodifiedDateInput">
+
+                                            <input type="text" id="LastUpdateDate" date-range-picker class="form-control" ng-model="DateHelper.SelectedDate" style="z-index: 0;" />
+                                            <span class="input-group-btn"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-3 col-sm-3 col-md-3" style="z-index: 0;">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label statusLabel">Status</label>
+                                        <div class="col-sm-8 statuswidth" style="z-index: 999; margin-top: -10px; ">
+
+                                            <ui-select ng-model="SearchInputs.Status" multiple theme="select2">
+                                                <ui-select-match allow-clear>{{$item}}</ui-select-match>
+                                                <ui-select-choices repeat="status in PlaceHolderStatusList | filter:$select.search">
+                                                    <div>{{status}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+
+
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Seasons </label>
+                                        <div class="col-sm-8 seasonwidth">
+
+                                            <ui-select ng-model="SearchInputs.Season" on-select="OnChangeSeason()" theme="select2">
+                                                <ui-select-match allow-clear>{{$select.selected.Season}}</ui-select-match>
+                                                <ui-select-choices repeat="season.Season as season in AllSeasons | filter:$select.search">
+                                                    <div>{{season.Season}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6" style="margin-left: -35px !important; text-align: left;">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">In Store Week</label>
+                                        <div class="col-sm-3" style="padding-left: 0px !important; margin-top: -7px; width: 31%;">
+
+                                            <div range-slider model-min="WeekRange.MinStart" model-max="WeekRange.MinEnd"
+                                                min="WeekRange.Min" max="WeekRange.Max" show-values="true" disabled="WeekRange.Disabled" filter="weekcode" data="Weeks">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 search-button placehldr_bttn buttonsetleft">
+
+                                    <a class="btn btn" ng-click="SeachInPlaceHolders()" href="Javascript:">Search</a>
+                                </div>
+
+
+                            </div>
+                        </form>
+                    </div>
+                    <!--<div class="col-md-1 search-button">
+                        <div class="inner searchButton form-group">
+                            <a class="btn btn placehldr_bttn" ng-click="SeachInPlaceHolders()" href="Javascript:">Search</a>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box record">
+                    <div class="box-body" id="placeHolderArea" style="overflow-y: auto;">
+                        <div class="table-responsive no-margin afftective">
+                            <table id="example2" datatable="ng" class="table no-bordered">
+                                <thead>
+
+                                    <tr>
+                                        <th class="selectAll">
+                                            <input type="checkbox" ng-disabled="PlaceHolders==''" ng-checked="SelectAll" ng-click="OnPlaceHolderSelectAll()" /></th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>ID <i class="fa fa-sort"></i></th>
+                                        <th>Name <i class="fa fa-sort"></i></th>
+                                        <th>Status <i class="fa fa-sort"></i></th>
+                                        <th>Workflow Status <i class="fa fa-sort"></i></th>
+                                        <th>Season <i class="fa fa-sort"></i></th>
+
+                                        <th>Start Week <i class="fa fa-sort"></i></th>
+                                        <th>End Week <i class="fa fa-sort"></i></th>
+                                        <th>Buy Qty <i class="fa fa-sort"></i></th>
+                                        <th>Merch Vendor Name <i class="fa fa-sort"></i></th>
+
+
+                                        <th ng-repeat="itemAttribute in PlaceHoderItemAttributes | filter:{ AttributeName : '!Workflow Status'}">{{itemAttribute.AttributeName}} <i class="fa fa-sort"></i></th>
+                                        <th>LastUpdateTime <i class="fa fa-sort"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="Placehollder in PlaceHolders">
+                                        <td>
+                                            <input type="checkbox" ng-model="Placehollder.Checked" ng-click="OnPlaceHolderSelected()" class="minimal" />
+                                        </td>
+                                        <td>
+                                            <a href="#/dashboard/{{Placehollder.Id}}">
+                                                <i class="fa fa-folder-o" style="font-size: 150%;"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span style="cursor: pointer;" ng-click="OpenPlaceHolder(Placehollder.Id)">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </span>
+
+                                        </td>
+                                        <td>{{Placehollder.Id}}</td>
+                                        <td>{{Placehollder.Name}}</td>
+
+
+                                        <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null? 
+                                            Placehollder.PlaceholderAssortmentAttrValues.Status:""}}</td>
+
+                                         <td ng-repeat="itemAttribute in Placehollder.ItemAttributes | filter:{ AttributeName : 'Workflow Status'}">
+                                        
+                                             {{itemAttribute.Value}}
+                                            
+                                         </td>
+
+                                        <td>{{Placehollder.Season}}</td>
+
+                                        <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null?
+                                             Placehollder.PlaceholderAssortmentAttrValues.StartWeekNumDefault:""}}</td>
+
+                                        <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null?
+                                             Placehollder.PlaceholderAssortmentAttrValues.EndWeekNumDefault:""}}</td>
+                                        <td>{{Placehollder.PlaceholderAssortmentAttrValues!=null? 
+                                            Placehollder.PlaceholderAssortmentAttrValues.RecBuy:""}}</td>
+
+                                        <td>
+                                            <span tooltip="{{Placehollder.MerchVendorName }}">
+                                            {{Placehollder!=null ?
+                                            Placehollder.MerchVendorName : "" | markdown}}
+                                        </span>
+                                        
+                                        </td>
+
+                                        <td ng-repeat="itemAttribute in Placehollder.ItemAttributes | filter:{ AttributeName : '!Workflow Status'}">{{itemAttribute.Value}}</td>
+                                        <td>
+                                            <span tooltip="{{Placehollder.LastUpdateTime | date:'MM/dd/yyyy hh:mm:ss a'}}">{{Placehollder.LastUpdateTime | date:'MM/dd/yyyy hh:mm:ss a' | markdown}}
+                                            </span>
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row last-one">
+                        <div class="col-md-10 col-lg-10  col-sm-10 center-block center600 center450">
+                            <button class="btn btn-defualt chg"
+                                ng-click="OnLinkPlaceholderClick()">
+                                Link Placeholder
+                            </button>
+                            <button class="btn btn-defualt chg" ng-disabled="DisableButtons" ng-click="OnChangeDashboardAttributes()">Change Dashboard Attr</button>
+                            <button class="btn btn-defualt chg" ng-disabled="DisableButtons" ng-click="OnChangeVendorAttributes()">Change Vendor Attr</button>
+                            <button class="btn btn-defualt chg" ng-disabled="DisableButtons" ng-click="OnChangeProductAttributes()">Change Product Attr</button>
+                            
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /.box -->
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+</div>
+
+

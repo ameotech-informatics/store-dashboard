@@ -1,0 +1,29 @@
+﻿
+<div class="general-wrapper">
+    
+    <section class="content">
+        <div class="box new-user col-lg-4">
+            <div class="box-header">
+                <h3 class="text-uppercase text-center">Please Sign In</h3>
+            </div>
+            <div class="box-body padding-layout">
+                <form role="form">
+                    <div ng-show="error" class="alert alert-danger">{{error}}</div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Email Address" ng-model="UserModel.Email" class="form-control" id="email" name="email" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password" ng-model="UserModel.PasswordEncr" class="form-control" id="email" name="email" />
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 user-button" style="text-align:right;margin-top:0px">
+                            <button class="btn btn-defualt cuser" ng-click="Login()" style="margin-right:0px;margin-top:0px;">Login</button>                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- /.row -->
+    </section>
+</div>

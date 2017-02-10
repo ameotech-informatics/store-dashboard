@@ -1,0 +1,23 @@
+﻿
+<div class="box no-border model">
+    <div class="box-body mejor">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="Cancel()">&times;</button>
+            <h3 class="modal-title">Save As CC Name</h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                <label>Save as CC Name</label>
+                <input type="text" ng-required="true" tooltip="{{PlaceHolderName}}" ng-model="PlaceHolderName" class="form-control" limit="30">
+            </p>
+        </div>
+        <div class="modal-footer no-border">
+            <div class="button ">
+                <button class="btn" ng-click="CheckCCName()">OK</button>
+                <button class="btn" style="margin-right:0px !important;" ng-click="Cancel()">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>

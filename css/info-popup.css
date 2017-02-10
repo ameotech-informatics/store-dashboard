@@ -1,0 +1,46 @@
+.modal-header:before
+{
+    border-bottom: 25px solid #fff;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: 20px;
+    top: -25px;
+    width: 20px;
+}
+
+.modal-sm-custom
+{
+    margin-top: 110px !important;
+    width: 300px !important;
+}
+
+.modal-dialog .modal-sm p
+{
+    font-family: "Roboto",sans-serif;
+    font-size: 17px;
+}
+
+#overlay .btn.btn-block.center-block
+{
+    width: 120px;
+    font-family: "Roboto",sans-serif;
+    font-size: 17px;
+}
+
+#overlay .modal-header.sm
+{
+    padding: 9px 15px;
+}
+
+#overlay .modal-body.cm
+{
+    padding-top: 5px;
+}
+
+.modal-dialog.lg-size
+{
+    width: 95% !important;
+}

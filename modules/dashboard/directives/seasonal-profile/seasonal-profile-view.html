@@ -1,0 +1,16 @@
+﻿<div>
+
+    <svg id="visualisation" width="100%" height="150"></svg>
+
+    <div class="box-footer no-border seasonal seasonoverride">
+        <div class="row">
+            <div class="col-xs-3 text-center" ng-repeat="path in paths | orderBy:'name'" style="border-right: 1px solid #f4f4f4;">
+                <div class="knob-label">
+                    <button class="btn btn-block btn-info" style="border-color:{{path.color}};background-color:{{path.color}};" 
+                            ng-click="HandlePath(path,$event)">{{path.name}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+       
+</div>

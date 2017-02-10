@@ -1,0 +1,83 @@
+﻿<div class="placeholderContainer">
+    <div class="form-group" style="height: 99px">
+        <label class="col-sm-3">Placeholder Name</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-controlCustom" />
+        </div>
+        <label class="col-sm-2 control-label">Description</label>
+        <div class="col-sm-4">
+            <textarea class="form-control" rows="3" id="comment"></textarea>
+        </div>
+    </div>
+    <div class="placeholderTabs">
+        <tabset>
+        <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active">
+             <div class="form-group">
+                <label class="col-sm-2 control-label">Attribute 1</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-controlCustom" />
+                </div>
+                <label class="col-sm-2 control-label">Attribute 2</label>
+                <div class="col-sm-2">
+                   <input type="text" class="form-controlCustom" />
+                </div>
+
+                <label class="col-sm-2 control-label">Attribute 3</label>
+                <div class="col-sm-2">
+                   <input type="text" class="form-controlCustom" />
+                </div>
+            </div>
+
+             <div class="form-group">
+                <label class="col-sm-2 control-label">Attribute 4</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-controlCustom" />
+                </div>
+                <label class="col-sm-2 control-label">Attribute 5</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-controlCustom" />
+                </div>
+                <label class="col-sm-2 control-label">Attribute 6</label>
+                <div class="col-sm-2">
+                   <input type="text" class="form-controlCustom" />
+                </div>
+            </div>
+
+             <div class="form-group">
+                <label class="col-sm-2 control-label">Attribute 7</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-controlCustom" /> 
+                </div>
+                <label class="col-sm-2 control-label">Attribute 8</label>
+                <div class="col-sm-2">
+                   <input type="text" class="form-controlCustom" />
+                </div>
+                <label class="col-sm-2 control-label">Attribute 9</label>
+                <div class="col-sm-2">
+                   <input type="text" class="form-controlCustom" />
+                </div>
+            </div>
+
+             <div class="form-group">
+                <label class="col-sm-2 control-label">Attribute 10</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-controlCustom" />
+                </div>
+                <label class="col-sm-2 control-label">Attribute 11</label>
+                <div class="col-sm-2">
+                   <input type="text" class="form-controlCustom" />
+                </div>
+                <label class="col-sm-2 control-label">Attribute 12</label>
+                <div class="col-sm-2">
+                   <input type="text" class="form-controlCustom" />
+                </div>
+            </div>
+        </tab>
+  </tabset>
+    </div>
+    <div class="modal-footer" style="text-align: center">
+        <button class="btn btn-primary" ng-click="Save()">Save</button>
+        <button class="btn btn-primary" ng-click="SaveAs()">SaveAs</button>
+        <button class="btn btn-primary" ng-click="Cancel()">Cancel</button>
+    </div>
+</div>

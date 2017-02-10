@@ -1,0 +1,49 @@
+﻿<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="Cancel()"><span aria-hidden="true">&times;</span></button>
+    <h3 class="modal-title">Change Context  </h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" name="contextform" novalidate ng-submit="Ok()">
+        <div class="form-group" ng-show="loading">
+            <label class="col-sm-6 control-label">please wait loading business units...</label>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Business Unit</label>
+            <div class="col-sm-6">
+                <select class="form-control" required placeholder="select Business Unit" ng-model="ContextModalToSend.Biz" ng-options="business.Name for business in Businesses" ng-change="onChangeBuz()">
+                </select>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Department</label>
+            <div class="col-sm-6">
+                <select class="form-control" required ng-model="ContextModalToSend.Department" ng-options=" department.Name for department in ContextModalToSend.Biz.Departments" ng-change="onChangeDep()">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Class</label>
+            <div class="col-sm-6">
+                <select class="form-control" required ng-model="ContextModalToSend.Class" ng-options=" class.Name for class in ContextModalToSend.Department.Classes">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">SubClass</label>
+            <div class="col-sm-6">
+                <select class="form-control" required ng-model="ContextModalToSend.SubClass" ng-options=" subclass.Name for subclass in ContextModalToSend.Class.SubClasses">
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-disabled="contextform.$invalid" type="submit">OK</button>
+            <button class="btn btn-warning" ng-click="Cancel()">Cancel</button>
+        </div>
+    </form>
+</div>
+
+

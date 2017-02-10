@@ -1,0 +1,64 @@
+﻿<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="Cancel()"><span aria-hidden="true">&times;</span></button>
+    <h3 class="modal-title">Change Product Attributes</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" name="formProductAttr" novalidate="">
+        <div class="box-body">
+            <div id="product-details">
+                <div ng-show="Error!=''" class="alert alert-danger">{{Error}}</div>
+                <div ng-show="Message!=''" class="alert alert-success">{{Message}}</div>
+
+                <div class="row">
+                    <div class="col-xs-2 col-sm-2 col-md-2 overloadHeight" ng-repeat="productAttr in PlaceHolderProductAttributes">
+                        <div class="form-group">
+                            <label class="col-sm-3 overloadWidthTo160">{{productAttr.Name}}
+                            </label>
+                            <div class="col-sm-8">
+
+                                <ui-select tooltip="{{productAttr.SelectedVal}}"
+                                    ng-model="productAttr.SelectedVal" theme="select2"
+                                    ng-if="productAttr.DataType=='LIST'" on-select="OnTextChanged()">
+                                                    <ui-select-match>{{$select.selected}}</ui-select-match>
+                                                    <ui-select-choices repeat="attValue in productAttr.ValidAttributesValues | filter:$select.search">
+                                                        <div>{{attValue}}</div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+                                <ui-select tooltip="{{productAttr.SelectedVal}}"
+                                           ng-model="productAttr.SelectedVal" addnewenabled theme="select2"
+                                           ng-if="productAttr.DataType=='LIST_WITH_OVERRIDE'" on-select="OnTextChanged()">
+                                    <ui-select-match>{{$select.selected}}</ui-select-match>
+                                    <ui-select-choices repeat="attValue in productAttr.ValidAttributesValues | filter:$select.search">
+                                        <div>{{attValue}}</div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <note-box ng-model="productAttr.SelectedVal" ng-if="productAttr.DataType=='NOTE'"></note-box>
+
+                                <input type="text" tooltip="{{productAttr.SelectedVal}}"
+                                    class="form-control" ng-keyup="OnTextChanged()" 
+                                    ng-model="productAttr.SelectedVal" ng-if="productAttr.DataType=='TEXT'" limit="{{productAttr.HighLimit}}" />
+
+                                <input type="text" tooltip="{{productAttr.SelectedVal}}" numbers-only class="form-control"
+                                    ng-model="productAttr.SelectedVal" 
+                                    ng-min="productAttr.LowLimit" ng-max="productAttr.HighLimit" ng-if="productAttr.DataType=='NUMBER'" />
+
+                                <input type="text" tooltip="{{productAttr.SelectedVal}}" float-only class="form-control"
+                                    ng-model="productAttr.SelectedVal" 
+                                    ng-min="productAttr.LowLimit" ng-max="productAttr.HighLimit" ng-if="productAttr.DataType=='FLOAT'" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn" ng-disabled="formProductAttr.$invalid" ng-click="formProductAttr.$valid && ChangeProductAttributes()">OK</button>
+    <button class="btn Cancel" ng-click="Cancel()">Cancel</button>
+</div>
+
